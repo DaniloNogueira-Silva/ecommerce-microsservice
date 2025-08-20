@@ -89,12 +89,12 @@ graph TD
     %% --- Conexões e Fluxos ---
     
     %% Fluxo de Autenticação
-    user -- "1. Autenticação (OIDC)" --> keycloak;
-    keycloak -- "2. Emissão de Token JWT" --> user;
+    user -- "1.Autenticação (OIDC)" --> keycloak;
+    keycloak -- "2.Emissão de Token JWT" --> user;
     
     %% Fluxo de Requisição Principal
-    user -- "3. Requisição API com JWT<br>/orders" --> kong;
-    kong -- "4. Valida Token & Roteia" --> orders_service;
+    user -- "3.Requisição API com JWT<br>/orders" --> kong;
+    kong -- "4.Valida Token & Roteia" --> orders_service;
     
     %% Fluxo de Eventos (Criação de Pedido)
     orders_service -- Salva Pedido --> postgres_db;
