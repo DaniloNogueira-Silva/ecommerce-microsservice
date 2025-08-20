@@ -1,0 +1,4 @@
+# CRIA PEDIDO VIA GATEWAY
+curl -i -X POST http://localhost:8000/orders \
+  -H "Content-Type: application/json" \
+  --data '{"userId": "12345", "total": 99.99}'

@@ -1,0 +1,12 @@
+# ORDER
+## REGISTRAR ORDER SERIVCE NO KONG
+curl -i -X POST http://localhost:8001/services/ \
+  --data name=orders-service \
+  --data host=host.docker.internal \
+  --data port=3001
+  
+## CRIA ROTA PARA O SERVIÇO
+curl -i -X POST http://localhost:8001/services/orders-service/routes \
+  --data name=orders-route \
+  --data 'paths[]=/orders' \
+  --data strip_path=false

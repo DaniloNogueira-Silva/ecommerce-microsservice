@@ -2,9 +2,9 @@
   "name": "ecommerce-microsservice",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Danilo Nogueira",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -19,6 +19,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/ecommerce-microsservice/test/jest-e2e.json"
   },
+  "workspaces": [   
+    "apps/*"
+  ],
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
