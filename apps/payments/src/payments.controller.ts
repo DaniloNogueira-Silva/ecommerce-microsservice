@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { PaymentsService } from './payments.service';
 
 @Controller()
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Get()
-  getHello(): string {
-    return this.paymentsService.getHello();
+  @EventPattern('order_created')
+  handleOrderCreated(@Payload() order: any) {
+    this.paymentsService.processPayment(order);
   }
 }

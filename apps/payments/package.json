@@ -1,5 +1,12 @@
 {
   "name": "payments",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/microservices": "^11.1.6",
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.8",
+    "stripe": "^18.4.0"
+  }
 }
