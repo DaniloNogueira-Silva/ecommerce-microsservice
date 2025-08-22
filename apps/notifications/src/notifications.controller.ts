@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { NotificationsService } from './notifications.service';
+import { Controller, Logger } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 @Controller()
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  private readonly logger = new Logger(NotificationsController.name);
 
-  @Get()
-  getHello(): string {
-    return this.notificationsService.getHello();
+  @EventPattern('payment_processed_notification')
+  handlePaymentProcessed(@Payload() order: any) {
+    this.logger.log(
+      `[NOTIFICATIONS-SERVICE] Evento 'payment_processed_notification' recebido! Pedido ID: ${order.id}`,
+    );
   }
 }

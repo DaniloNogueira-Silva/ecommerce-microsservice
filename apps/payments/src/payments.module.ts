@@ -11,13 +11,28 @@ import { PaymentsService } from './payments.service';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
+    // Registra um array com DOIS clientes, um para cada destino
     ClientsModule.register([
       {
-        name: 'PAYMENTS_SERVICE_CLIENT',
+        name: 'INVENTORY_SERVICE_CLIENT', // Nome único para injeção
         transport: Transport.RMQ,
         options: {
           urls: [process.env.RABBITMQ_URL!],
-          queue: 'inventory_queue',
+          queue: 'inventory_queue', // Fila de destino
+          queueOptions: {
+            durable: true,
+          },
+        },
+      },
+      {
+        name: 'NOTIFICATIONS_SERVICE_CLIENT', // Nome único para injeção
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.RABBITMQ_URL!],
+          queue: 'notifications_queue', // Fila de destino
+          queueOptions: {
+            durable: true,
+          },
         },
       },
     ]),
