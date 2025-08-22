@@ -5,8 +5,17 @@ curl -i -X POST http://localhost:8001/services/ \
   --data host=host.docker.internal \
   --data port=3001
   
-## CRIA ROTA PARA O SERVIÇO
+#### CRIA ROTA PARA O SERVIÇO
 curl -i -X POST http://localhost:8001/services/orders-service/routes \
   --data name=orders-route \
   --data 'paths[]=/orders' \
   --data strip_path=false
+
+#### CRIA OS CONSUMERS
+curl -i -X POST http://localhost:8001/consumers/ --data username=testuser
+
+#### DELEÇÃO
+curl -i -X DELETE http://localhost:8001/services/orders-service/routes/orders-route
+
+####
+curl -i -X DELETE http://localhost:8001/services/orders-service

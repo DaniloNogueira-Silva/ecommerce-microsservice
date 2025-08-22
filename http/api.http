@@ -1,4 +1,22 @@
 # CRIA PEDIDO VIA GATEWAY
 curl -i -X POST http://localhost:8000/orders \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJCT21ZYXI2aVJVY1o3dlVYc1UwLTM2ODdaNE5OTEhsc1d1N2xkZnRGX3RRIn0.eyJleHAiOjE3NTU4ODU1NzQsImlhdCI6MTc1NTg4NTI3NCwianRpIjoiNDlkMGQ4ZDMtM2ZmNS00MTBkLTkwMzUtYTE1NTVlYWI0ZWJjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9lY29tbWVyY2UtcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNWM4OTU4ZmEtMWQzNy00ZmY2LTlhYmQtMzI4ODRhNzEzZDI5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZWNvbW1lcmNlLWFwaSIsInNpZCI6IjEyMDU5NTZiLWU3MGMtNDkxOC1iZDIwLWIwNzBmMDNkODMxMCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJkZWZhdWx0LXJvbGVzLWVjb21tZXJjZS1yZWFsbSJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6InRlc3QgdXNlciIsInByZWZlcnJlZF91c2VybmFtZSI6InRlc3R1c2VyIiwiZ2l2ZW5fbmFtZSI6InRlc3QiLCJmYW1pbHlfbmFtZSI6InVzZXIiLCJlbWFpbCI6InRlc3RAZW1haWwuY29tIn0.cyz1pNJgZw5pLiDNrDPNywmHPifG2C5Ml3DM4mM32190ErvVXxQfTypL-ocan0Jd5CosGk4Q2c9-000UFrKxbJP50d8wNcCX0wjDqYAxf4nc1BQeb0-_UUTFBCXNwGmEHDwNRFPRgWg7PO4WJpIYt_37iKBGZJDSndOOPoifXfw-y2ogv0TPAPsFp34hqec9KLq6TMSZmF2TyX1Ec2bNTNXH8_kIX-Y8oxrOltI7p6iAJqABfvGknmOmicrJUiFqJmxa0Eptg9qAkLd92w2YQD1hZsvXpFSC7L6ixViA3YirqkdMJYjjOev6FyT16RxqI2_Gx7n58sJAhJq9NbePrg"
   --data '{"userId": "12345", "total": 99.99}'
+
+#### USER
+curl -X POST "http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=ecommerce-api" \
+  -d "client_secret=FF6ZMs3phHfKp9Z7M8mKdpfbqV2GAkuU" \
+  -d "username=testuser" \
+  -d "password=password"
+
+####
+curl http://localhost:8001/consumers/testuser/jwt
+
+####
+curl -i -X PATCH http://localhost:8001/consumers/testuser/jwt/f2ba7904-201c-4d25-bdd5-b3b540831f55 \
+  --data "key=http://localhost:8080/realms/ecommerce-realm"
+
