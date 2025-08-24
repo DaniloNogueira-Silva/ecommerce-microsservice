@@ -1,0 +1,21 @@
+# .dockerignore
+
+# Ignore a pasta de dependências principal
+node_modules
+
+# Ignore as pastas de dependências de cada app
+apps/*/node_modules
+
+# Ignore a saída de compilação
+dist
+build
+
+# Git
+.git
+.gitignore
+
+# Outros
+.env
+.dockerignore
+monitoring
+README.md

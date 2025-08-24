@@ -34,7 +34,7 @@ services:
     image: rabbitmq:3.12-management
     container_name: rabbitmq_broker
     ports:
-      - "5672:5672"   # Porta para as aplicações
+      - "5672:5672" # Porta para as aplicações
       - "15672:15672" # Porta para a UI de gerenciamento
     networks:
       - ecommerce-network
@@ -103,11 +103,55 @@ services:
     networks:
       - ecommerce-network
     healthcheck:
-      test: ["CMD", "kong", "health"]
+      test: [ "CMD", "kong", "health" ]
       interval: 10s
       timeout: 10s
       retries: 10
     restart: on-failure
+
+  #-----------------------------------------
+  # STACK DE OBSERVABILIDADE
+  #-----------------------------------------
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - ecommerce-network
+
+  #-----------------------------------------
+  # MICROSSERVIÇOS
+  #-----------------------------------------
+  orders-service:
+    ports:
+        - "3001:3001"
+    container_name: orders_service
+    build:
+      context: .
+      dockerfile: apps/orders/Dockerfile # <-- Aponta para o Dockerfile específico
+    env_file: [ .env ]
+    environment:
+      - DB_HOST=postgres
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    depends_on: [ postgres, rabbitmq ]
+    networks: [ ecommerce-network ]
+
+  #-----------------------------------------
+  # OBSERVABILIDADE
+  #-----------------------------------------
+  grafana:
+    image: grafana/grafana-oss:10.1.5
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - ecommerce-network
 
 #-----------------------------------------
 # VOLUMES E REDES
@@ -115,6 +159,7 @@ services:
 volumes:
   postgres-data:
   redis-data:
+
 
 networks:
   ecommerce-network:
