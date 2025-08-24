@@ -1,22 +1,25 @@
 {
-  "$schema": "https://json.schemastore.org/nest-cli",
+  "$schema": "https://json.schemastore.org/nest-cli.json",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/ecommerce-microsservice/src",
-  "compilerOptions": {
-    "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/ecommerce-microsservice/tsconfig.app.json"
-  },
   "monorepo": true,
-  "root": "apps/ecommerce-microsservice",
+  "root": "apps/orders",
   "projects": {
-    "ecommerce-microsservice": {
+    "orders": {
       "type": "application",
-      "root": "apps/ecommerce-microsservice",
+      "root": "apps/orders",
       "entryFile": "main",
-      "sourceRoot": "apps/ecommerce-microsservice/src",
+      "sourceRoot": "apps/orders/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/ecommerce-microsservice/tsconfig.app.json"
+        "tsConfigPath": "apps/orders/tsconfig.app.json"
+      }
+    },
+    "payments": {
+      "type": "application",
+      "root": "apps/payments",
+      "entryFile": "main",
+      "sourceRoot": "apps/payments/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/payments/tsconfig.app.json"
       }
     },
     "inventory": {
@@ -35,24 +38,6 @@
       "sourceRoot": "apps/notifications/src",
       "compilerOptions": {
         "tsConfigPath": "apps/notifications/tsconfig.app.json"
-      }
-    },
-    "orders": {
-      "type": "application",
-      "root": "apps/orders",
-      "entryFile": "main",
-      "sourceRoot": "apps/orders/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/orders/tsconfig.app.json"
-      }
-    },
-    "payments": {
-      "type": "application",
-      "root": "apps/payments",
-      "entryFile": "main",
-      "sourceRoot": "apps/payments/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/payments/tsconfig.app.json"
       }
     }
   }
