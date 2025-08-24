@@ -4,9 +4,12 @@ import { Repository } from 'typeorm';
 import { ClientProxy } from '@nestjs/microservices';
 import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { Logger } from 'testcontainers/build/common';
 
 @Injectable()
 export class OrdersService {
+  private readonly logger = new Logger(OrdersService.name);
+
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
@@ -17,8 +20,9 @@ export class OrdersService {
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
     const newOrder = this.orderRepository.create(createOrderDto);
     await this.orderRepository.save(newOrder);
-
+    this.logger.info(`new order created: ${JSON.stringify(newOrder)}`);
     this.rabbitClient.emit('order_created', newOrder);
+    this.logger.info(`Order emitted: ${JSON.stringify(newOrder)}`);
 
     return newOrder;
   }

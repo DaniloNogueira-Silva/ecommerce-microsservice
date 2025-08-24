@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   #-----------------------------------------
   # BANCOS DE DADOS E CACHE
@@ -110,55 +108,6 @@ services:
       timeout: 10s
       retries: 10
     restart: on-failure
-
-  #-----------------------------------------
-  # MICROSSERVIÇOS
-  #-----------------------------------------
-  orders-service:
-    container_name: orders_service
-    build:
-      context: .
-      dockerfile: apps/orders/Dockerfile # <-- Aponta para o Dockerfile específico
-    env_file: [ .env ]
-    environment:
-      - DB_HOST=postgres
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    depends_on: [ postgres, rabbitmq ]
-    networks: [ ecommerce-network ]
-
-  payments-service:
-    container_name: payments_service
-    build:
-      context: .
-      dockerfile: apps/payments/Dockerfile # <-- Aponta para o Dockerfile específico
-    env_file: [ .env ]
-    environment:
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    depends_on: [ rabbitmq ]
-    networks: [ ecommerce-network ]
-
-  inventory-service:
-    container_name: inventory_service
-    build:
-      context: .
-      dockerfile: apps/inventory/Dockerfile # <-- Aponta para o Dockerfile específico
-    env_file: [ .env ]
-    environment:
-      - REDIS_URL=redis://redis:6379
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    depends_on: [ redis, rabbitmq ]
-    networks: [ ecommerce-network ]
-
-  notifications-service:
-    container_name: notifications_service
-    build:
-      context: .
-      dockerfile: apps/notifications/Dockerfile # <-- Aponta para o Dockerfile específico
-    env_file: [ .env ]
-    environment:
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    depends_on: [ rabbitmq ]
-    networks: [ ecommerce-network ]
 
 #-----------------------------------------
 # VOLUMES E REDES
