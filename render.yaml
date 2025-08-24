@@ -1,0 +1,89 @@
+# render.yaml - Infraestrutura como Código para a Plataforma de E-commerce
+
+services:
+  #-----------------------------------------
+  # INFRAESTRUTURA GERENCIADA
+  #-----------------------------------------
+  - name: postgres-db
+    type: pserv # pserv = PostgreSQL Service
+    plan: free # Usa o plano gratuito do Render
+    # O Render irá gerar um usuário, senha e URL de conexão automaticamente.
+
+  - name: redis-cache
+    type: pserv # pserv = Redis Service
+    plan: free # Usa o plano gratuito do Render
+
+  #-----------------------------------------
+  # NOSSOS MICROSSERVIÇOS
+  #-----------------------------------------
+  - name: orders-service
+    type: web # web = Serviço exposto publicamente com uma URL
+    runtime: docker
+    dockerfilePath: ./apps/orders/Dockerfile
+    envVars:
+      # Conecta ao serviço de banco de dados gerenciado do Render
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: postgres-db
+          property: host
+      - key: DB_PORT
+        fromService:
+          type: pserv
+          name: postgres-db
+          property: port
+      - key: DB_USERNAME
+        fromService:
+          type: pserv
+          name: postgres-db
+          property: user
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: postgres-db
+          property: password
+      - key: DB_DATABASE
+        fromService:
+          type: pserv
+          name: postgres-db
+          property: database
+      # A URL do RabbitMQ será adicionada como um segredo
+      - key: RABBITMQ_URL
+        fromSecretFile:
+          name: app-secrets
+          key: RABBITMQ_URL
+
+  - name: payments-service
+    type: worker # worker = Serviço de background, sem URL pública
+    runtime: docker
+    dockerfilePath: ./apps/payments/Dockerfile
+    envVars:
+      - key: RABBITMQ_URL
+        fromSecretFile:
+          name: app-secrets
+          key: RABBITMQ_URL
+
+  - name: inventory-service
+    type: worker
+    runtime: docker
+    dockerfilePath: ./apps/inventory/Dockerfile
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: pserv
+          name: redis-cache
+          property: connectionString # O Render fornece a URL completa do Redis
+      - key: RABBITMQ_URL
+        fromSecretFile:
+          name: app-secrets
+          key: RABBITMQ_URL
+
+  - name: notifications-service
+    type: worker
+    runtime: docker
+    dockerfilePath: ./apps/notifications/Dockerfile
+    envVars:
+      - key: RABBITMQ_URL
+        fromSecretFile:
+          name: app-secrets
+          key: RABBITMQ_URL
