@@ -153,6 +153,15 @@ services:
     networks:
       - ecommerce-network
 
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    container_name: jaeger
+    ports:
+      - "6831:6831/udp" # Porta para receber spans
+      - "16686:16686"   # Porta para a UI do Jaeger
+    networks:
+      - ecommerce-network
+
 #-----------------------------------------
 # VOLUMES E REDES
 #-----------------------------------------
