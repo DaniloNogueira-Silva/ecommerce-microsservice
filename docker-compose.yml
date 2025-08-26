@@ -128,7 +128,7 @@ services:
   orders-service:
     ports:
         - "3001:3001"
-    container_name: orders_service
+    container_name: orders-service
     build:
       context: .
       dockerfile: apps/orders/Dockerfile # <-- Aponta para o Dockerfile específico

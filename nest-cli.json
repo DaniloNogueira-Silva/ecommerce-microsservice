@@ -3,6 +3,10 @@
   "collection": "@nestjs/schematics",
   "monorepo": true,
   "root": "apps/orders",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "assets": ["tracing.js"]
+  },
   "projects": {
     "orders": {
       "type": "application",

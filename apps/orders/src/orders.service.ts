@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClientProxy } from '@nestjs/microservices';
 import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { Logger } from 'testcontainers/build/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { Counter } from 'prom-client';
 
@@ -24,10 +23,10 @@ export class OrdersService {
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
     const newOrder = this.orderRepository.create(createOrderDto);
     await this.orderRepository.save(newOrder);
-    this.logger.info(`new order created: ${JSON.stringify(newOrder)}`);
+    this.logger.log(`new order created: ${JSON.stringify(newOrder)}`);
     this.ordersCreatedCounter.inc();
     this.rabbitClient.emit('order_created', newOrder);
-    this.logger.info(`Order emitted: ${JSON.stringify(newOrder)}`);
+    this.logger.log(`Order emitted: ${JSON.stringify(newOrder)}`);
 
     return newOrder;
   }
