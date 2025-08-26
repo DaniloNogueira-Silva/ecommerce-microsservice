@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/nest-cli.json",
   "collection": "@nestjs/schematics",
   "monorepo": true,
-  "root": "apps/orders",
+  "root": ".",
   "compilerOptions": {
     "deleteOutDir": true,
     "assets": ["tracing.js"]
