@@ -31,10 +31,8 @@ COPY --from=builder /usr/src/app/dist/apps/orders ./dist
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 COPY --from=dependencies /usr/src/app/apps/orders/package.json ./package.json
 
-COPY --from=builder /usr/src/app/apps/orders/src/instrument.ts ./instrument.ts
-
 # Expõe a porta que a aplicação usa
 EXPOSE 3001
 
 # Comando para iniciar a aplicação
-CMD ["node", "--require", "./instrument.ts", "dist/main.js"]
+CMD ["node", "dist/main.js"]

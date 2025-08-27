@@ -34,8 +34,8 @@ services:
     image: rabbitmq:3.12-management
     container_name: rabbitmq_broker
     ports:
-      - "5672:5672" # Porta para as aplicações
-      - "15672:15672" # Porta para a UI de gerenciamento
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - ecommerce-network
 
@@ -67,7 +67,7 @@ services:
   # API GATEWAY
   #-----------------------------------------
   kong-migrations:
-    image: kong:3.6 # <-- Imagem Oficial
+    image: kong:3.6
     command: "kong migrations bootstrap"
     environment:
       - KONG_DATABASE=postgres
@@ -82,7 +82,7 @@ services:
     restart: on-failure
 
   kong-gateway:
-    image: kong:3.6 # <-- Imagem Oficial
+    image: kong:3.6
     container_name: kong_gateway
     environment:
       - KONG_DATABASE=postgres
@@ -90,7 +90,6 @@ services:
       - KONG_PG_USER=admin
       - KONG_PG_PASSWORD=admin
       - KONG_PG_DATABASE=kong
-      # NÃO PRECISAMOS MAIS DA VARIÁVEL KONG_PLUGINS AQUI
       - KONG_ADMIN_LISTEN=0.0.0.0:8001
       - KONG_ADMIN_GUI_URL=http://localhost:8002
       - KONG_ADMIN_GUI_API_URL=http://localhost:8001
@@ -131,7 +130,7 @@ services:
     container_name: orders-service
     build:
       context: .
-      dockerfile: apps/orders/Dockerfile # <-- Aponta para o Dockerfile específico
+      dockerfile: apps/orders/Dockerfile 
     env_file: [ .env ]
     environment:
       - DB_HOST=postgres
@@ -150,15 +149,6 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    networks:
-      - ecommerce-network
-
-  jaeger:
-    image: jaegertracing/all-in-one:1.53
-    container_name: jaeger
-    ports:
-      - "6831:6831/udp" # Porta para receber spans
-      - "16686:16686"   # Porta para a UI do Jaeger
     networks:
       - ecommerce-network
 
